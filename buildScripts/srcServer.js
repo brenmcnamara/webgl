@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-import config from '../webpack.config.dev';
+import config from '../webpack.config';
 import express from 'express';
 import path from 'path';
 import webpack from 'webpack';
@@ -11,7 +11,7 @@ const compiler = webpack(config);
 
 app.use(require('webpack-dev-middleware')(compiler, {
   noInfo: true,
-  publicPath: config.output.publicPath
+  publicPath: config.output.publicPath,
 }));
 
 app.get('/', function(req, res) {

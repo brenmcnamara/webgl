@@ -1,13 +1,9 @@
-// More info on Webpack's Node API here: https://webpack.github.io/docs/node.js-api.html
-// Allowing console calls below since this is a build file.
-/*eslint-disable no-console */
+/* eslint-disable no-console */
 import chalk from 'chalk';
 import webpack from 'webpack';
-import webpackConfig from '../webpack.config.prod';
+import webpackConfig from '../webpack.config';
 
-process.env.NODE_ENV = 'production'; // this assures the Babel dev config doesn't apply.
-
-console.log(chalk.blue('Generating minified bundle for production. This will take a moment...'));
+console.log(chalk.blue('Generating build. This will take a moment...'));
 
 webpack(webpackConfig).run((err, stats) => {
   if (err) { // so a fatal error occurred. Stop here.

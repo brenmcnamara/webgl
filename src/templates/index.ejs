@@ -12,9 +12,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <% for (var i = 0; i < htmlWebpackPlugin.options.cssFiles.length; ++i) { %>
+    <link rel="stylesheet" href="<%= htmlWebpackPlugin.options.cssFiles[i] %>" />
+  <% } %>
 </head>
 <body>
-  <h1>Starter Kit</h1>
-  <p>Welcome to the Starter Kit!</p>
+  <div id="root"></div>
 </body>
 </html>

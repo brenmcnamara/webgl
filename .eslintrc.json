@@ -5,16 +5,24 @@
     "plugin:import/errors",
     "plugin:import/warnings"
   ],
+  "plugins": [
+    "react"
+  ],
   "parserOptions": {
     "ecmaVersion": 7,
+    "ecmaFeatures": {
+      "jsx": true
+    },
     "sourceType": "module"
   },
   "env": {
     "browser": true,
-    "node": true,
-    "mocha": true
+    "node": true
   },
   "rules": {
-    "no-console": 1
+    "comma-dangle": ["error", "always-multiline"],
+    "no-console": 1,
+    "react/jsx-uses-react": "error",
+    "react/jsx-uses-vars": "error"
   }
 }
