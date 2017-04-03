@@ -22,7 +22,7 @@ export default {
       template: 'src/templates/index.ejs',
       inject: true,
       cssFiles: ['/css/blueprint.css']
-        .concat(Stylesheets.DistCSSFilesBasename.map(filename => `/css/${filename}`)),
+        .concat(Stylesheets.getDistCSSFilesBasename().map(filename => `/css/${filename}`)),
     }),
     new CopyWebpackPlugin([
       {

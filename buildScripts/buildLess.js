@@ -10,9 +10,9 @@ import path from 'path';
 
 const compilePromises = [];
 
-Stylesheets.SrcLessFiles.forEach((filename, i) => {
-  const outputCSSFilename = Stylesheets.DistCSSFiles[i];
-  const outputCSSMapFilename = Stylesheets.DistCSSMapFiles[i];
+Stylesheets.getSrcLessFiles().forEach((filename, i) => {
+  const outputCSSFilename = Stylesheets.getDistCSSFiles()[i];
+  const outputCSSMapFilename = Stylesheets.getDistCSSMapFiles()[i];
   const promise = readFile(filename)
     .then(buffer => less.render(buffer.toString(), { sourceMap: {} }))
     .then(output =>

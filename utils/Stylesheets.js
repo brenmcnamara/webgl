@@ -2,28 +2,30 @@
 import fs from 'fs';
 import path from 'path';
 
-let SrcLessFiles = fs
-  .readdirSync(path.resolve('src/less'))
-  .map(file => path.resolve('src/less', file));
+const Stylesheets = {
 
-let DistCSSFiles = SrcLessFiles.map(filename => {
-  const basename = path.basename(filename);
-  const basenameNoExtension = basename.split('.')[0];
-  return path.resolve('dist/css', basenameNoExtension + '.css');
-});
+  getSrcLessFiles() {
+    return fs
+      .readdirSync(path.resolve('src/less'))
+      .map(file => path.resolve('src/less', file));
+  },
 
-let DistCSSMapFiles = DistCSSFiles.map(filename => `${filename}.map`);
+  getDistCSSFiles() {
+    return Stylesheets.getSrcLessFiles().map(filename => {
+      const basename = path.basename(filename);
+      const basenameNoExtension = basename.split('.')[0];
+      return path.resolve('dist/css', basenameNoExtension + '.css');
+    });
+  },
 
-let DistCSSFilesBasename = DistCSSFiles.map(filename => path.basename(filename));
+  getDistCSSMapFiles() {
+    return Stylesheets.getDistCSSFiles().map(filename => `${filename}.map`);
+  },
 
-export default {
-
-  SrcLessFiles,
-
-  DistCSSFiles,
-
-  DistCSSMapFiles,
-
-  DistCSSFilesBasename,
+  getDistCSSFilesBasename() {
+    return Stylesheets.getDistCSSFiles().map(filename => path.basename(filename));
+  },
 
 };
+
+export default Stylesheets;

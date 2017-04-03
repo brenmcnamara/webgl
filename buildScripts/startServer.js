@@ -1,8 +1,8 @@
+/* eslint-disable no-console */
+
 import express from 'express';
 import path from 'path';
 import compression from 'compression';
-
-/*eslint-disable no-console */
 
 const port = 3000;
 const app = express();
