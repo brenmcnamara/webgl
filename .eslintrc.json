@@ -15,6 +15,9 @@
     },
     "sourceType": "module"
   },
+  "globals": {
+    "Promise": true
+  },
   "env": {
     "browser": true,
     "node": true

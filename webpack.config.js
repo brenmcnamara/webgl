@@ -1,5 +1,6 @@
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import Stylesheets from './utils/Stylesheets';
 
 import path from 'path';
 
@@ -17,11 +18,11 @@ export default {
     filename: 'bundle.js',
   },
   plugins: [
-    // Create HTML file that includes reference to bundled JS.
     new HtmlWebpackPlugin({
       template: 'src/templates/index.ejs',
       inject: true,
-      cssFiles: ['/css/blueprint.css'],
+      cssFiles: ['/css/blueprint.css']
+        .concat(Stylesheets.DistCSSFilesBasename.map(filename => `/css/${filename}`)),
     }),
     new CopyWebpackPlugin([
       {
