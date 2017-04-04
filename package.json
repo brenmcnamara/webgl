@@ -12,7 +12,9 @@
     "localtunnel": "lt --port 3000",
     "prebuild": "npm-run-all clean-dist lint",
     "security-check": "nsp check",
-    "start": "babel-node buildScripts/startServer"
+    "start": "babel-node buildScripts/startServer",
+    "test": "jest",
+    "test-watch": "npm run test -- --watch"
   },
   "author": "Brendan McNamara",
   "license": "MIT",
@@ -41,6 +43,7 @@
     "eslint-watch": "2.1.14",
     "express": "4.14.0",
     "html-webpack-plugin": "2.22.0",
+    "jest": "^19.0.2",
     "less": "^2.7.2",
     "less-plugin-autoprefix": "^1.5.1",
     "localtunnel": "1.8.1",
