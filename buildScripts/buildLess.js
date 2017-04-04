@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 
+import LessPluginAutoPrefix from 'less-plugin-autoprefix';
 import Stylesheets from '../utils/Stylesheets';
 
 import chalk from 'chalk';
@@ -13,6 +14,8 @@ commander
   .version('0.0.1')
   .option('-w, --watch', 'Watch for changes to less files')
   .parse(process.argv);
+
+const prefixer = new LessPluginAutoPrefix({ browsers: ['last 2 versions'] });
 
 const compilePromises = [];
 
@@ -55,10 +58,14 @@ function compileLessAndWriteToCSSFile(filename) {
   const cssMapFilename = Stylesheets.getDistCSSMapFileForLessFile(filename);
   let output = null;
   return readFile(filename)
-    .then(buffer => less.render(buffer.toString(), { sourceMap: {} }))
+    .then(buffer => less.render(buffer.toString(), { plugins: [prefixer], sourceMap: {} }))
     .then(_output => output = _output)
-    .then(() => writeFile(cssFilename, output.css))
-    .then(() => writeFile(cssMapFilename, output.map));
+    .then(() => writeFile(cssFilename, Buffer.from(output.css)))
+    .then(() => {
+      if (output.map) {
+        writeFile(cssMapFilename, Buffer.from(output.map.toString()));
+      }
+    });
 }
 
 /**

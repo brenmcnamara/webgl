@@ -10,7 +10,8 @@ const Stylesheets = {
   getSrcLessFiles() {
     return fs
       .readdirSync(path.resolve('src/less'))
-      .map(file => path.resolve('src/less', file));
+      .map(file => path.resolve('src/less', file))
+      .filter(file => file.endsWith('.less'));
   },
 
   /**
