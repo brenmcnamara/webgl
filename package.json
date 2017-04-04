@@ -10,7 +10,7 @@
     "lint": "esw webpack.config.* src buildScripts --color",
     "lint-watch": "npm run lint -- --watch",
     "localtunnel": "lt --port 3000",
-    "prebuild": "npm-run-all clean-dist lint",
+    "prebuild": "npm run clean-dist",
     "security-check": "nsp check",
     "start": "babel-node buildScripts/startServer",
     "test": "jest",
@@ -50,10 +50,12 @@
     "mkdirp": "^0.5.1",
     "npm-run-all": "3.1.1",
     "nsp": "2.6.2",
+    "pre-commit": "^1.2.2",
     "rimraf": "2.5.4",
     "webpack": "1.13.2",
     "webpack-dev-middleware": "1.8.4",
     "webpack-hot-middleware": "2.13.0",
     "webpack-md5-hash": "0.0.5"
-  }
+  },
+  "pre-commit": ["security-check", "lint", "test"]
 }
