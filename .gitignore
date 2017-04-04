@@ -1,6 +1,9 @@
 # Mac
 .DS_Store
 
+# Emacs
+*~
+
 # Config File
 config.json
 
