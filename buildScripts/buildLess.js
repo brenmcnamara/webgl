@@ -18,29 +18,31 @@ const compilePromises = [];
 
 if (commander.watch) {
   console.log(chalk.blue('Compiling less files and watch for changes...'));
+  console.log(chalk.red('--watch not yet implemented'));
+  process.exit(1);
 }
 else {
   console.log(chalk.blue('Compiling less files...'));
+  Stylesheets.getSrcLessFiles().forEach(filename => {
+    const promise = compileLessAndWriteToCSSFile(filename);
+    compilePromises.push(promise);
+  });
+
+  Promise.all(compilePromises)
+    .then(() => {
+      console.log(chalk.green('Done compiling less!'));
+      process.exit(0);
+    })
+    .catch(error => {
+      console.error(chalk.red(error));
+      process.exit(1);
+    });
 }
 
-Stylesheets.getSrcLessFiles().forEach(filename => {
-  const promise = compileLessAndWriteToCSSFile(filename);
-  compilePromises.push(promise);
-});
-
-Promise.all(compilePromises)
-  .then(() => {
-    console.log(chalk.green('Done compiling less!'));
-    process.exit(0);
-  })
-  .catch(error => {
-    console.error(chalk.red(error));
-    process.exit(1);
-  });
 
 // ------------------------------------------------------------------------------------------------
 //
-// UTILITY FUNCNTIONS
+// UTILITY FUNCTIONS
 //
 // ------------------------------------------------------------------------------------------------
 
@@ -60,7 +62,7 @@ function compileLessAndWriteToCSSFile(filename) {
 }
 
 /**
- * Takes a filename and returns a promise that is completed with a buffer containing the constents
+ * Takes a filename and returns a promise that is completed with a buffer containing the contents
  * of the file.
  */
 function readFile(filename) {
