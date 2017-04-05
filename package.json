@@ -7,6 +7,7 @@
     "build:less": "babel-node buildScripts/buildLess",
     "build:js": "babel-node buildScripts/buildJS",
     "clean-dist": "rimraf ./dist && mkdir dist",
+    "flow": "flow src/",
     "lint": "esw webpack.config.* src buildScripts --color",
     "lint-watch": "npm run lint -- --watch",
     "localtunnel": "lt --port 3000",
@@ -29,6 +30,7 @@
     "babel-cli": "6.16.0",
     "babel-core": "6.17.0",
     "babel-loader": "6.2.5",
+    "babel-preset-flow": "^6.23.0",
     "babel-preset-latest": "6.16.0",
     "babel-preset-react": "^6.23.0",
     "babel-register": "6.16.3",
@@ -41,6 +43,7 @@
     "eslint-plugin-import": "2.0.1",
     "eslint-plugin-react": "^6.10.3",
     "eslint-watch": "2.1.14",
+    "flow-bin": "^0.43.0",
     "html-webpack-plugin": "2.22.0",
     "http-server": "^0.9.0",
     "jest": "^19.0.2",
@@ -60,6 +63,7 @@
   "pre-commit": [
     "security-check",
     "lint",
+    "flow",
     "test"
   ]
 }
