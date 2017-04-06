@@ -9,6 +9,6 @@ window.onload = function() {
       <h1>Starter Kit</h1>
       <p>Hello From Starter Kit</p>
     </div>,
-    document.getElementById('root')
+    document.getElementById('root'),
   );
 }
