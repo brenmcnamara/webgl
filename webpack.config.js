@@ -21,8 +21,10 @@ export default {
     new HtmlWebpackPlugin({
       template: 'src/templates/index.ejs',
       inject: true,
-      cssFiles: ['/css/blueprint.css']
-        .concat(Stylesheets.getDistCSSFilesBasename().map(filename => `/css/${filename}`)),
+      cssFiles: [
+        '//cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css',
+        '/css/blueprint.css',
+      ].concat(Stylesheets.getDistCSSFilesBasename().map(filename => `/css/${filename}`)),
     }),
     new CopyWebpackPlugin([
       {
