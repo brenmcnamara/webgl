@@ -11,4 +11,4 @@ window.onload = function() {
     </div>,
     document.getElementById('root'),
   );
-}
+};

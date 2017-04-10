@@ -12,9 +12,6 @@
   ],
   "parserOptions": {
     "ecmaVersion": 7,
-    "ecmaFeatures": {
-      "jsx": true
-    },
     "sourceType": "module"
   },
   "globals": {
@@ -34,7 +31,7 @@
     "flowtype/define-flow-type": 1,
     "flowtype/delimiter-dangle": [
       2,
-      "never"
+      "always-multiline"
     ],
     "flowtype/generic-spacing": [
       2,
@@ -44,14 +41,6 @@
     "flowtype/object-type-delimiter": [
       2,
       "comma"
-    ],
-    "flowtype/require-parameter-type": 2,
-    "flowtype/require-return-type": [
-      2,
-      "always",
-      {
-        "annotateUndefined": "never"
-      }
     ],
     "flowtype/require-valid-file-annotation": 2,
     "flowtype/semi": [
@@ -70,19 +59,17 @@
       2,
       "never"
     ],
-    "flowtype/type-id-match": [
-      2,
-      "^([A-Z][a-z0-9]+)+Type$"
-    ],
     "flowtype/union-intersection-spacing": [
       2,
       "always"
     ],
     "flowtype/use-flow-type": 1,
     "flowtype/valid-syntax": 1,
+    "max-len": ["error", 100],
     "no-console": 1,
     "react/jsx-uses-react": "error",
-    "react/jsx-uses-vars": "error"
+    "react/jsx-uses-vars": "error",
+    "semi": ["error", "always"]
   },
   "settings": {
     "flowtype": {
