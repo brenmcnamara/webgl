@@ -6,6 +6,8 @@
     "build": "npm-run-all build:*",
     "build:less": "babel-node buildScripts/buildLess",
     "build:js": "babel-node buildScripts/buildJS",
+    "build-watch": "npm-run-all --parallel build-watch:*",
+    "build-watch:js": "npm run build:js -- --watch",
     "clean-dist": "rimraf ./dist && mkdir dist",
     "flow": "flow src/",
     "lint": "esw webpack.config.* src buildScripts --color",
