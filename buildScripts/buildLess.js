@@ -4,12 +4,13 @@ import LessPluginAutoPrefix from 'less-plugin-autoprefix';
 import Stylesheets from '../utils/Stylesheets';
 
 import chalk from 'chalk';
+import chokidar from 'chokidar';
 import commander from 'commander';
 import fs from 'fs';
 import less from 'less';
 import mkdirp from 'mkdirp';
 import path from 'path';
-import chokidar from 'chokidar';
+
 
 commander
   .version('0.0.1')
@@ -25,27 +26,38 @@ const PATH_TO_WATCH = path.resolve('src/less/');
 if (commander.watch) {
   console.log(chalk.blue('Compiling less files and watch for changes...'));
   chokidar.watch(PATH_TO_WATCH).on('all', (event, path) => {
-    if (event === "add" || event === "change") {
-      console.log(chalk.blue(event, path));
-      compileLessAndWriteToCSSFile(path)
-        .then(() => {
-          console.log(chalk.green('Done compiling ' + path));
-        });
-    }
-    if (event === "unlink") {
-      const cssFilename = Stylesheets.getDistCSSFileForLessFile(path);
-      const cssMapFilename = Stylesheets.getDistCSSMapFileForLessFile(path);
-      Promise.all([removeFile(cssFilename), removeFile(cssMapFilename)]);
-    }
-    if (event === "unlinkDir") {
-      const cssFilepath = Stylesheets.getDistCSSPathForLessPath(path);
-      removePath(cssFilepath);
-    }
-    if (event === "addDir" && path !== PATH_TO_WATCH) {
-      createCSSDirectory(path)
-        .catch(error => {
-          console.error(chalk.red(error));
-        });
+    switch(event){
+      case 'add':
+      case 'change':
+        console.log(chalk.blue(event, path));
+        compileLessAndWriteToCSSFile(path)
+          .then(() => {
+            console.log(chalk.green(`Done compiling  ${path}`));
+          });
+      break;
+
+      case 'unlink': {
+        const cssFilename = Stylesheets.getDistCSSFileForLessFile(path);
+        const cssMapFilename = Stylesheets.getDistCSSMapFileForLessFile(path);
+        Promise.all([removeFile(cssFilename), removeFile(cssMapFilename)]);
+        break;
+      }
+
+      case 'unlinkDir': {
+        const cssFilepath = Stylesheets.getDistCSSPathForLessPath(path);
+        removePath(cssFilepath);
+        break;
+      }
+
+      case 'addDir': {
+        if (path !== PATH_TO_WATCH) {
+          createCSSDirectory(path)
+          .catch(error => {
+            console.error(chalk.red(error));
+          });
+        }
+        break;
+      }
     }
   });
 }
