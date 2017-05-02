@@ -4,11 +4,13 @@ import LessPluginAutoPrefix from 'less-plugin-autoprefix';
 import Stylesheets from '../utils/Stylesheets';
 
 import chalk from 'chalk';
+import chokidar from 'chokidar';
 import commander from 'commander';
 import fs from 'fs';
 import less from 'less';
 import mkdirp from 'mkdirp';
 import path from 'path';
+
 
 commander
   .version('0.0.1')
@@ -19,10 +21,45 @@ const prefixer = new LessPluginAutoPrefix({ browsers: ['last 2 versions'] });
 
 const compilePromises = [];
 
+const PATH_TO_WATCH = path.resolve('src/less/');
+
 if (commander.watch) {
   console.log(chalk.blue('Compiling less files and watch for changes...'));
-  console.log(chalk.red('--watch not yet implemented'));
-  process.exit(1);
+  chokidar.watch(PATH_TO_WATCH).on('all', (event, path) => {
+    switch(event){
+      case 'add':
+      case 'change':
+        console.log(chalk.blue(event, path));
+        compileLessAndWriteToCSSFile(path)
+          .then(() => {
+            console.log(chalk.green(`Done compiling  ${path}`));
+          });
+      break;
+
+      case 'unlink': {
+        const cssFilename = Stylesheets.getDistCSSFileForLessFile(path);
+        const cssMapFilename = Stylesheets.getDistCSSMapFileForLessFile(path);
+        Promise.all([removeFile(cssFilename), removeFile(cssMapFilename)]);
+        break;
+      }
+
+      case 'unlinkDir': {
+        const cssFilepath = Stylesheets.getDistCSSPathForLessPath(path);
+        removePath(cssFilepath);
+        break;
+      }
+
+      case 'addDir': {
+        if (path !== PATH_TO_WATCH) {
+          createCSSDirectory(path)
+          .catch(error => {
+            console.error(chalk.red(error));
+          });
+        }
+        break;
+      }
+    }
+  });
 }
 else {
   console.log(chalk.blue('Compiling less files...'));
@@ -69,6 +106,22 @@ function compileLessAndWriteToCSSFile(filename) {
 }
 
 /**
+ * Creates a new directory in the css folder to match that in the less folder
+ */
+function createCSSDirectory(pathname) {
+  return new Promise((resolve, reject) => {
+      const cssPathname = Stylesheets.getDistCSSPathForLessPath(pathname);
+      mkdirp(cssPathname, error => {
+        if (error) {
+          reject(error);
+          return;
+        }
+        resolve();
+      });
+  });
+}
+
+/**
  * Takes a filename and returns a promise that is completed with a buffer containing the contents
  * of the file.
  */
@@ -103,6 +156,38 @@ function writeFile(filename, buffer) {
         }
         resolve();
       });
+    });
+  });
+}
+
+/**
+ * Takes a filename to remove and returns a promise that is completed when the file has been
+ * deleted.
+ */
+function removeFile(filename) {
+  return new Promise((resolve, reject) => {
+    fs.unlink(filename, (error) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve();
+    });
+  });
+}
+
+/**
+ * Takes a filepath to remove and returns a promise that is completed when the path has been
+ * deleted.
+ */
+function removePath(filepath) {
+  return new Promise((resolve, reject) => {
+    fs.rmdir(filepath, (error) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve();
     });
   });
 }

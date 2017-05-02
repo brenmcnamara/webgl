@@ -25,6 +25,14 @@ const Stylesheets = {
   },
 
   /**
+   * For a given less path, get the name of the css path
+   */
+  getDistCSSPathForLessPath(pathname) {
+    const basename = path.basename(pathname);
+    return path.resolve('dist/css', basename);
+  },
+
+  /**
    * For a given less filename, get the name of the css map file that is compiled from the less
    * file.
    */
