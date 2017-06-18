@@ -1,4 +1,3 @@
-import CopyWebpackPlugin from 'copy-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import Stylesheets from './utils/Stylesheets';
 
@@ -26,16 +25,6 @@ export default {
         '/css/blueprint.css',
       ].concat(Stylesheets.getDistCSSFilesBasename().map(filename => `/css/${filename}`)),
     }),
-    new CopyWebpackPlugin([
-      {
-        from: path.resolve('node_modules/@blueprintjs/core/dist/blueprint.css'),
-        to: path.resolve('dist/css/blueprint.css'),
-      },
-      {
-        from: path.resolve('node_modules/@blueprintjs/core/dist/blueprint.css.map'),
-        to: path.resolve('dist/css/blueprint.css.map'),
-      },
-    ]),
   ],
   module: {
     loaders: [
