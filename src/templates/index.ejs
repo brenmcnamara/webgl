@@ -12,12 +12,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <script src="https://use.fontawesome.com/e3dbe48cc9.js"></script>
-  <% for (var i = 0; i < htmlWebpackPlugin.options.cssFiles.length; ++i) { %>
-    <link rel="stylesheet" href="<%= htmlWebpackPlugin.options.cssFiles[i] %>" />
-  <% } %>
 </head>
 <body>
-  <div id="root"></div>
+  <div id="root">
+    <canvas id="canvas" style="position: absolute; top: 0; left: 0;">
+    </canvas>
+  </div>
 </body>
 </html>

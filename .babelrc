@@ -1,4 +1,7 @@
 {
-  "plugins": ["babel-plugin-transform-object-rest-spread"],
+  "plugins": [
+    "babel-plugin-transform-object-rest-spread",
+    "transform-class-properties"
+  ],
   "presets": ["latest", "react", "flow"]
 }
