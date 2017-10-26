@@ -4,6 +4,8 @@ import Suite2D from "./suites/2D/index";
 
 import invariant from "invariant";
 
+import { UniformColor } from "./suites/Core/Color";
+
 import { rotate, scale, translate } from "./suites/Core/Transform2D";
 
 function main() {
@@ -17,17 +19,19 @@ function main() {
     console.warn("Failed to initialize renderer.");
     return;
   }
-  const rect1 = new Suite2D.Shapes.Rectangle();
+  const container = new Suite2D.Shape.Container();
+
+  const rect1 = new Suite2D.Shape.Rectangle();
+  rect1.backgroundColor = UniformColor.fromHex(0xff00ff);
   rect1.localTransform = rotate(rect1.localTransform, Math.PI / 4);
   rect1.localTransform = translate(rect1.localTransform, 300, 0);
   rect1.localTransform = scale(rect1.localTransform, 30, 30);
+  rect1.parent = container;
 
-  const tri = new Suite2D.Shapes.Triangle();
-  tri.localTransform = translate(tri.localTransform, 100, 100);
-  tri.localTransform = scale(tri.localTransform, 100, 100);
+  window.rect = rect1;
+  window.container = container;
 
-  rect1.renderer = renderer;
-  tri.renderer = renderer;
+  container.renderer = renderer;
   renderer.render(window.innerWidth, window.innerHeight);
 
   window.onresize = () => {

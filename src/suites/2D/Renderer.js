@@ -90,16 +90,29 @@ export default class Renderer {
 
     // Render shapes.
     this._shapes.forEach((shape, index) => {
+      if (shape.vertices.length === 0) {
+        return;
+      }
+
       const {
         attributeLocations,
         program,
         uniformLocations,
       } = this._shapesMetadata[index];
+
       context.useProgram(program);
+
+      const { backgroundColor } = shape;
 
       // Set uniforms
       context.uniform2f(uniformLocations.u_resolution, width, height);
-      context.uniform4f(uniformLocations.u_color, 1, 0, 0.0, 1.0, 1.0);
+      context.uniform4f(
+        uniformLocations.u_color,
+        backgroundColor.r,
+        backgroundColor.g,
+        backgroundColor.b,
+        backgroundColor.a
+      );
 
       // Set Vertices
       const flattenVertices = new Float32Array(shape.vertices.length * 2);
