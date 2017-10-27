@@ -117,7 +117,9 @@ export default class Renderer {
       // Set Vertices
       const flattenVertices = new Float32Array(shape.vertices.length * 2);
       shape.vertices.forEach((vertex, ii) => {
-        const { x, y } = transformVertex(vertex, shape.localTransform);
+        // TODO: Should not have to make this calculation for every vertex
+        // on every frame. Can we have GPU do some of the work?
+        const { x, y } = transformVertex(vertex, shape.transform);
         flattenVertices.set([x, y], ii * 2);
       });
       const vertexBuffer = context.createBuffer();

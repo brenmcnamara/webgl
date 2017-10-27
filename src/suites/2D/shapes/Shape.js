@@ -3,7 +3,11 @@
 import invariant from "invariant";
 
 import { getDescriptor as getVec2Descriptor, type Vec2 } from "../../Core/Vec2";
-import { IDENTITY_MATRIX, type Transform2D } from "../../Core/Transform2D";
+import {
+  IDENTITY_MATRIX,
+  multiply,
+  type Transform2D,
+} from "../../Core/Transform2D";
 import { UniformColor } from "../../Core/Color";
 
 import type Renderer from "../Renderer";
@@ -121,6 +125,25 @@ export default class Shape {
   set localTransform(val: Transform2D): void {
     this._invariantMutatorEnabled("transform");
     this._localTransform = val;
+  }
+
+  get transform() {
+    // TODO: Cache this.
+    const ancestors: Array<Shape> = [this];
+    let nextAncestor = this._parent;
+    while (nextAncestor) {
+      ancestors.push(nextAncestor);
+      nextAncestor = nextAncestor._parent;
+    }
+
+    let productMatrix = IDENTITY_MATRIX;
+    for (let i = ancestors.length - 1; i >= 0; --i) {
+      const nextMatrix = ancestors[i].localTransform;
+      if (nextMatrix !== IDENTITY_MATRIX) {
+        productMatrix = multiply(productMatrix, nextMatrix);
+      }
+    }
+    return productMatrix;
   }
 
   get children() {

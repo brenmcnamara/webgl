@@ -6,7 +6,7 @@ import invariant from "invariant";
 
 import { UniformColor } from "./suites/Core/Color";
 
-import { rotate, scale, translate } from "./suites/Core/Transform2D";
+import { scale, translate } from "./suites/Core/Transform2D";
 
 function main() {
   // $FlowFixMe - This is a canvas element.
@@ -20,12 +20,12 @@ function main() {
     return;
   }
   const container = new Suite2D.Shape.Container();
+  container.localTransform = translate(container.localTransform, 100, 100);
+  container.localTransform = scale(container.localTransform, 2, 2);
 
   const rect1 = new Suite2D.Shape.Rectangle();
   rect1.backgroundColor = UniformColor.fromHex(0xff00ff);
-  rect1.localTransform = rotate(rect1.localTransform, Math.PI / 4);
-  rect1.localTransform = translate(rect1.localTransform, 300, 0);
-  rect1.localTransform = scale(rect1.localTransform, 30, 30);
+  rect1.localTransform = scale(rect1.localTransform, 100, 100);
   rect1.parent = container;
 
   window.rect = rect1;
