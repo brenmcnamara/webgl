@@ -39,6 +39,7 @@ export default class Renderer {
   _canvas: HTMLCanvasElement;
   _gl: ?WebGLRenderingContext = null;
   _height: number = 0;
+  _isLooping: bool = false;
   _mutator: Mutator;
   _shapes: Array<Shape> = [];
   _shapesMetadata: Array<ShapeMetadata> = [];
@@ -46,7 +47,9 @@ export default class Renderer {
 
   constructor(canvas: HTMLCanvasElement, mutator: Mutator) {
     this._canvas = canvas;
+    this._height = parseFloat(canvas.height) || 0;
     this._mutator = mutator;
+    this._width = parseFloat(canvas.width) || 0;
   }
 
   get mutator() {
@@ -65,26 +68,58 @@ export default class Renderer {
     return true;
   }
 
-  /**
-   * Render the currently-registered shapes.
-   */
-  render(width: number, height: number): void {
+  startRenderLoop(): void {
     invariant(
-      !this._mutator.isEnabled,
-      "Mutations must be complete before rendering"
+      !this._isLooping,
+      "Cannot start a render loop. Render loop has already started."
     );
-    const context = this._getContext();
+    requestAnimationFrame(this._renderLoop);
+  }
 
-    // Update dimensions.
+  stopRenderLoop(): void {
+    invariant(
+      this._isLooping,
+      "Cannot stop a render loop. Render loop has not started."
+    );
+  }
+
+  resize(width: number, height: number): void {
     this._width = width;
     this._height = height;
     this._canvas.width = width.toString();
     this._canvas.height = height.toString();
     this._canvas.style.width = `${width}px`;
     this._canvas.style.height = `${height}px`;
+  }
+
+  _renderLoop = (): void => {
+    if (this._mutator.isEnabled) {
+      // eslint-disable-next-line no-console
+      console.warn("Skipping frame do to active mutator");
+      return;
+    }
+    // TODO: Use the mutator to figure out if we have any mutations that
+    // need to re-render.
+    this._render();
+    requestAnimationFrame(this._renderLoop);
+  };
+
+  /**
+   * A single render pass.
+   */
+  _render(): void {
+    if (this._width === 0 || this._height === 0) {
+      return;
+    }
+    invariant(
+      !this._mutator.isEnabled,
+      "Mutations must be complete before rendering"
+    );
+
+    const context = this._getContext();
 
     // Clear canvas.
-    context.viewport(0, 0, width, height);
+    context.viewport(0, 0, this._width, this._height);
     context.clearColor(0, 0, 0, 1.0);
     context.clear(context.COLOR_BUFFER_BIT);
 
@@ -105,7 +140,11 @@ export default class Renderer {
       const { backgroundColor } = shape;
 
       // Set uniforms
-      context.uniform2f(uniformLocations.u_resolution, width, height);
+      context.uniform2f(
+        uniformLocations.u_resolution,
+        this._width,
+        this._height
+      );
       context.uniform4f(
         uniformLocations.u_color,
         backgroundColor.r,

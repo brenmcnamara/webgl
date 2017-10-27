@@ -32,10 +32,16 @@ function main() {
   window.container = container;
 
   container.renderer = renderer;
-  renderer.render(window.innerWidth, window.innerHeight);
+  renderer.resize(window.innerWidth, window.innerHeight);
+  renderer.startRenderLoop();
 
+  setTimeout(() => {
+    mutator.pushContext({});
+    rect1.localTransform = scale(rect1.localTransform, 2, 2);
+    mutator.popContext();
+  }, 2000);
   window.onresize = () => {
-    renderer.render(window.innerWidth, window.innerHeight);
+    renderer.resize(window.innerWidth, window.innerHeight);
   };
 }
 

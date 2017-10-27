@@ -158,8 +158,8 @@ export default class Shape {
 
   _invariantMutatorEnabled(propName: string): void {
     invariant(
-      !this._renderer || this._renderer.mutator.enabled,
-      "Cannot mutate property %s unless mutator is enabled",
+      !this._renderer || this._renderer.mutator.isEnabled,
+      `Cannot mutate property "%s" unless mutator is enabled`,
       propName
     );
   }

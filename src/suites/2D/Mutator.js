@@ -9,6 +9,7 @@ export type MutationContext = {};
  * mutated.
  */
 export default class Mutator {
+  _hasMutations: bool = false;
   _stack: Array<MutationContext> = [];
 
   get isEnabled() {
@@ -17,10 +18,9 @@ export default class Mutator {
 
   pushContext(context: MutationContext): void {
     this._stack.push(context);
-    this._enabled = true;
   }
 
-  pop(): void {
+  popContext(): void {
     invariant(
       this._stack.length > 0,
       "Cannot pop Mutator context. Stack is empty"
